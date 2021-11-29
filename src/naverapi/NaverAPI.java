@@ -9,19 +9,51 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.jsw.util.Util;
 
+import dto.NaverApiDTO;
+
 public class NaverAPI {
+	public String searchNews(String str) {
+		String code = Util.readLineFile("C:\\Users\\SAMSUNG\\eclipse-workspace\\file\\naverapi_secretcode.txt");
+		String[] cArr = code.split("\\n");
+		
+        String clientId = cArr[0]; //애플리케이션 클라이언트 아이디값"
+        String clientSecret = cArr[1]; //애플리케이션 클라이언트 시크릿값"
+
+        String text = null;
+        try {
+            text = URLEncoder.encode(str, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("검색어 인코딩 실패",e);
+        }
+
+
+        String apiURL = "https://openapi.naver.com/v1/search/news?query=" + text;    // json 결과
+        //String apiURL = "https://openapi.naver.com/v1/search/blog.xml?query="+ text; // xml 결과
+
+
+        Map<String, String> requestHeaders = new HashMap<>();
+        requestHeaders.put("X-Naver-Client-Id", clientId);
+        requestHeaders.put("X-Naver-Client-Secret", clientSecret);
+        String responseBody = get(apiURL,requestHeaders);
+        return responseBody;
+	}
 
 	public String searchBlog(String input) {
 		String code = Util.readLineFile("C:\\Users\\SAMSUNG\\eclipse-workspace\\file\\naverapi_secretcode.txt");
 		String[]cArr = code.split("\n");
 		//		 Util.readLineFile("C:\\Users\\SAMSUNG\\eclipse-workspace").split("\n");
-//		String clientId = "fwb3CBL5F8XgBzf7VjPU"; //애플리케이션 클라이언트 아이디값"
-//		String clientSecret = "sE9UBNEAU2"; //애플리케이션 클라이언트 시크릿값"
+		String clientId = cArr[0]; //애플리케이션 클라이언트 아이디값"
+		String clientSecret = cArr[1]; //애플리케이션 클라이언트 시크릿값"
 
 
 		String text = null;
@@ -37,13 +69,30 @@ public class NaverAPI {
 
 
 		Map<String, String> requestHeaders = new HashMap<>();
-		requestHeaders.put("X-Naver-Client-Id", cArr[0]);
-		requestHeaders.put("X-Naver-Client-Secret", cArr[1]);
+		requestHeaders.put("X-Naver-Client-Id", clientId);
+		requestHeaders.put("X-Naver-Client-Secret", clientSecret);
 		String responseBody = get(apiURL,requestHeaders);
 		return responseBody;
 
 
 		//	     System.out.println(responseBody);
+	}
+	//json 데이터 파싱해서 전달
+	public ArrayList<NaverApiDTO> getListJson(String responseBody) {
+		Gson gson = new Gson();
+		ArrayList<NaverApiDTO>list = new ArrayList<NaverApiDTO>();
+//      NaverApiDTO dto = gson.fromJson(responseBody, NaverApiDTO.class);
+//      System.out.println(dto.getTitle());
+		JsonObject jsonObject = new Gson().fromJson(responseBody, JsonObject.class);
+		JsonArray jsonArray = jsonObject.getAsJsonArray("items");
+		System.out.println(jsonArray.get(0));
+		for (JsonElement em : jsonArray) {
+			NaverApiDTO dto = gson.fromJson(em, NaverApiDTO.class);
+			list.add(dto);
+
+		}
+		return list;
+		
 	}
 
 	public String get(String apiUrl, Map<String, String> requestHeaders){
