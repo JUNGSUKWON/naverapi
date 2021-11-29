@@ -1,6 +1,7 @@
 package naverapi;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -22,11 +23,16 @@ import dto.NaverApiDTO;
 
 public class MainClass {
 
+	static NaverAPI nv = new NaverAPI();
 	public static void main(String[] args) {
-		NaverAPI nv = new NaverAPI();
+		
+		//번호를 정해서 그 번호로 검색하게 한다.
+		String responseBody=number();
+//		String responseBody = nv.searchNews("코로나");
 //    	String responseBody = nv.searchBlog("놀러갈만한곳");
-		String responseBody = nv.searchNews("코로나");
-		System.out.println(responseBody);
+//    	String responseBody = nv.searchMovie("송강호");
+//    	String responseBody = nv.searchBook("힐링");
+//		System.out.println(responseBody);
 		ArrayList<NaverApiDTO>list = nv.getListJson(responseBody);
 		for(NaverApiDTO dto:list) {
 			
@@ -38,9 +44,25 @@ public class MainClass {
 			System.out.println(dto.getPubDate());
 			System.out.println();
 		}
-		
-
-
 	}
+
+	private static String number() {
+		
+		System.out.println("1번부터 4번까지 검색하고 싶은 번호를 입력해주세요");
+		Scanner sc = new Scanner(System.in);
+		int number = sc.nextInt();
+		if(number==1) {
+			return nv.searchNews("축구");
+		}else if(number==2) {
+			return nv.searchBlog("놀러갈만한곳");
+		}else if(number==3) {
+			return nv.searchMovie("액션");
+		}else if(number==4) {
+			return nv.searchBook("여행");
+		}
+		
+		return null;
+	}
+
 
 }

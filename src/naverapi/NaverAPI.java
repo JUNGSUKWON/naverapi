@@ -22,7 +22,7 @@ import com.jsw.util.Util;
 import dto.NaverApiDTO;
 
 public class NaverAPI {
-	public String searchNews(String str) {
+	public String searchNews(String str) {//뉴스 검색
 		String code = Util.readLineFile("C:\\Users\\SAMSUNG\\eclipse-workspace\\file\\naverapi_secretcode.txt");
 		String[] cArr = code.split("\\n");
 		
@@ -36,7 +36,6 @@ public class NaverAPI {
             throw new RuntimeException("검색어 인코딩 실패",e);
         }
 
-
         String apiURL = "https://openapi.naver.com/v1/search/news?query=" + text;    // json 결과
         //String apiURL = "https://openapi.naver.com/v1/search/blog.xml?query="+ text; // xml 결과
 
@@ -48,7 +47,7 @@ public class NaverAPI {
         return responseBody;
 	}
 
-	public String searchBlog(String input) {
+	public String searchBlog(String input) {//블로그 검색
 		String code = Util.readLineFile("C:\\Users\\SAMSUNG\\eclipse-workspace\\file\\naverapi_secretcode.txt");
 		String[]cArr = code.split("\n");
 		//		 Util.readLineFile("C:\\Users\\SAMSUNG\\eclipse-workspace").split("\n");
@@ -144,5 +143,54 @@ public class NaverAPI {
 		} catch (IOException e) {
 			throw new RuntimeException("API 응답을 읽는데 실패했습니다.", e);
 		}
+	}
+
+	public String searchMovie(String str) {
+		String code = Util.readLineFile("C:\\Users\\SAMSUNG\\eclipse-workspace\\file\\naverapi_secretcode.txt");
+		String[] cArr = code.split("\\n");
+		
+        String clientId = cArr[0]; //애플리케이션 클라이언트 아이디값"
+        String clientSecret = cArr[1]; //애플리케이션 클라이언트 시크릿값"
+
+        String text = null;
+        try {
+            text = URLEncoder.encode(str, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("검색어 인코딩 실패",e);
+        }
+
+        String apiURL = "https://openapi.naver.com/v1/search/movie?query=" + text;    // json 결과
+        //String apiURL = "https://openapi.naver.com/v1/search/blog.xml?query="+ text; // xml 결과
+
+        Map<String, String> requestHeaders = new HashMap<>();
+        requestHeaders.put("X-Naver-Client-Id", clientId);
+        requestHeaders.put("X-Naver-Client-Secret", clientSecret);
+        String responseBody = get(apiURL,requestHeaders);
+        return responseBody;
+	}
+
+	public String searchBook(String str) {
+		String code = Util.readLineFile("C:\\Users\\SAMSUNG\\eclipse-workspace\\file\\naverapi_secretcode.txt");
+		String[] cArr = code.split("\\n");
+		
+        String clientId = cArr[0]; //애플리케이션 클라이언트 아이디값"
+        String clientSecret = cArr[1]; //애플리케이션 클라이언트 시크릿값"
+
+        String text = null;
+        try {
+            text = URLEncoder.encode(str, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("검색어 인코딩 실패",e);
+        }
+
+        String apiURL = "https://openapi.naver.com/v1/search/book?query=" + text;    // json 결과
+        //String apiURL = "https://openapi.naver.com/v1/search/blog.xml?query="+ text; // xml 결과
+
+
+        Map<String, String> requestHeaders = new HashMap<>();
+        requestHeaders.put("X-Naver-Client-Id", clientId);
+        requestHeaders.put("X-Naver-Client-Secret", clientSecret);
+        String responseBody = get(apiURL,requestHeaders);
+        return responseBody;
 	}
 }
