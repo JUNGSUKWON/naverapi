@@ -27,7 +27,7 @@ public class MainClass {
 	public static void main(String[] args) {
 		
 		//번호를 정해서 그 번호로 검색하게 한다.
-		String responseBody=number();
+		String responseBody=searchNumber();
 //		String responseBody = nv.searchNews("코로나");
 //    	String responseBody = nv.searchBlog("놀러갈만한곳");
 //    	String responseBody = nv.searchMovie("송강호");
@@ -46,19 +46,27 @@ public class MainClass {
 		}
 	}
 
-	private static String number() {
+	private static String searchNumber() {
 		
-		System.out.println("1번부터 4번까지 검색하고 싶은 번호를 입력해주세요");
+		System.out.println("1번부터 4번까지 검색하고 싶은 번호를 입력해주세요 (1뉴스 2블로그 3영화 4책");
 		Scanner sc = new Scanner(System.in);
 		int number = sc.nextInt();
 		if(number==1) {
-			return nv.searchNews("축구");
+			System.out.println("검색하고 싶은 키워드를 입력해주세요:");
+			String search = sc.next();
+			return nv.searchNews(search);
 		}else if(number==2) {
-			return nv.searchBlog("놀러갈만한곳");
+			System.out.println("검색하고 싶은 키워드를 입력해주세요:");
+			String search = sc.next();
+			return nv.searchBlog(search);
 		}else if(number==3) {
-			return nv.searchMovie("액션");
+			System.out.println("검색하고 싶은 키워드를 입력해주세요:");
+			String search = sc.next();
+			return nv.searchMovie(search);
 		}else if(number==4) {
-			return nv.searchBook("여행");
+			System.out.println("검색하고 싶은 키워드를 입력해주세요:");
+			String search = sc.next();
+			return nv.searchBook(search);
 		}
 		
 		return null;
