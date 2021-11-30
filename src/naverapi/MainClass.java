@@ -30,7 +30,7 @@ public class MainClass {
 		String responseBody=searchNumber();
 //		String responseBody = nv.searchNews("코로나");
 //    	String responseBody = nv.searchBlog("놀러갈만한곳");
-//    	String responseBody = nv.searchMovie("송강호");
+//    	String responseBody = nv.searchMovie("줄리아 로버츠");
 //    	String responseBody = nv.searchBook("힐링");
 //		System.out.println(responseBody);
 		ArrayList<NaverApiDTO>list = nv.getListJson(responseBody);
